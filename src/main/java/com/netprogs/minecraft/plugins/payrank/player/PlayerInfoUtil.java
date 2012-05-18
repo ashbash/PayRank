@@ -64,9 +64,16 @@ public class PlayerInfoUtil {
             if (PluginConfig.getInstance().getConfig(SettingsConfig.class).isLoggingDebug()) {
                 logger.info("playerGroup: " + group);
             }
+            if (group.equalsIgnoreCase(groupName)) {
+                if (PluginConfig.getInstance().getConfig(SettingsConfig.class).isLoggingDebug()) {
+                    logger.info("Matched playerGroup: " + group);
+                }
+                return true;
+            }
         }
 
-        return plugin.getPermission().playerInGroup(nullString, playerName, groupName);
+        // return plugin.getPermission().playerInGroup(nullString, playerName, groupName);
+        return false;
     }
 
     public PlayerInfo getPlayerInfo(JavaPlugin plugin, CommandSender sender, String searchPlayer) {
@@ -105,7 +112,7 @@ public class PlayerInfoUtil {
                     nextRank = rank;
 
                     if (PluginConfig.getInstance().getConfig(SettingsConfig.class).isLoggingDebug()) {
-                        logger.info("Found next rank: " + nextRank.getName());
+                        logger.info("Adjusting next rank: " + nextRank.getName());
                     }
 
                     break;
@@ -119,22 +126,41 @@ public class PlayerInfoUtil {
                     currentRank = rank;
 
                     if (PluginConfig.getInstance().getConfig(SettingsConfig.class).isLoggingDebug()) {
-                        logger.info("Found current rank: " + currentRank.getName());
+                        logger.info("Adjusting current rank: " + currentRank.getName());
                     }
                 }
 
                 // set the previous rank here so when we find a match to the current one, we have the previous
                 if (currentRank == null) {
+
                     previousRank = rank;
+
+                    if (PluginConfig.getInstance().getConfig(SettingsConfig.class).isLoggingDebug()) {
+                        logger.info("Adjusting previous rank: " + previousRank.getName());
+                    }
                 }
             }
 
             if (PluginConfig.getInstance().getConfig(SettingsConfig.class).isLoggingDebug()) {
 
-                if (previousRank != null) {
-                    logger.info("Found previous rank: " + previousRank.getName());
+                logger.info("-- Rank Results --");
+
+                if (currentRank != null) {
+                    logger.info("Current rank: " + currentRank.getName());
                 } else {
-                    logger.info("Did not find previous rank.");
+                    logger.info("NO current rank");
+                }
+
+                if (nextRank != null) {
+                    logger.info("Next rank: " + nextRank.getName());
+                } else {
+                    logger.info("NO next rank");
+                }
+
+                if (previousRank != null) {
+                    logger.info("Previous rank: " + previousRank.getName());
+                } else {
+                    logger.info("NO previous rank");
                 }
             }
 
